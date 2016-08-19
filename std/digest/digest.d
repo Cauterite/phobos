@@ -113,7 +113,7 @@ unittest
 unittest
 {
     //Generating the hashes of a file using the template API
-    import std.digest.crc, std.digest.sha, std.digest.md;
+    import std.digest.crc, std.digest.sha, std.digest.md, std.digest.murmur;
     import std.stdio;
     // Digests a file and prints the result.
     void digestFile(Hash)(ref Hash hash, string filename) if(isDigest!Hash)
@@ -134,16 +134,19 @@ unittest
         MD5 md5;
         SHA1 sha1;
         CRC32 crc32;
+        Murmur3 murmur3;
 
         md5.start();
         sha1.start();
         crc32.start();
+        murmur3.start();
 
         foreach (arg; args[1 .. $])
         {
             digestFile(md5, arg);
             digestFile(sha1, arg);
             digestFile(crc32, arg);
+            digestFile(murmur3, arg);
         }
     }
 }
@@ -151,7 +154,7 @@ unittest
 ///
 unittest
 {
-    import std.digest.crc, std.digest.sha, std.digest.md;
+    import std.digest.crc, std.digest.sha, std.digest.md, std.digest.murmur;
     import std.stdio;
 
     // Digests a file and prints the result.
@@ -173,12 +176,14 @@ unittest
         auto md5 = new MD5Digest();
         auto sha1 = new SHA1Digest();
         auto crc32 = new CRC32Digest();
+        auto murmur3 = new Murmur3Digest();
 
         foreach (arg; args[1 .. $])
         {
           digestFile(md5, arg);
           digestFile(sha1, arg);
           digestFile(crc32, arg);
+          digestFile(murmur3, arg);
         }
     }
 }
